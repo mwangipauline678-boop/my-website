@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SuccessHub Website</title>
+    <style>html {
+  scroll-behavior: smooth;
+}
+        /* Base Styles */
+        body { font-family: sans-serif; margin: 0; background-color: #f7f9fb; color: #333; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
+
+        /* General UI Elements */
+        .btn { padding: 10px 20px; border: none; border-radius: 4px; font-weight: bold; cursor: pointer; text-decoration: none; display: inline-block; }
+        .btn-gold { background-color: #f6c038; color: #333; }
+        .btn-blue { background-color: #2b5797; color: #fff; }
+        .text-link { color: #333; text-decoration: none; margin-left: 15px; }
+
+        /* Header */
+        header { background-color: #fff; padding: 15px 0; display: flex; align-items: center; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+        .logo { display: flex; align-items: center; }
+        .logo img { height: 30px; margin-right: 10px; }
+        .logo span { font-size: 20px; font-weight: bold; }
+        nav { display: flex; align-items: center; margin-left: auto; }
+
+        /* Hero Section */
+        #hero {
+    padding: 120px 0; 
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+
+    background: linear-gradient(rgba(255, 255, 255, 0.7), rgba(255, 255, 255, 0.7)), 
+                url( "/home/lyn/Pictures/overview.jpeg") no-repeat; 
+    
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+}
+
+#hero .content {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+        /* Services Section */
+        #services { background-color: #fff; padding: 60px 0; text-align: center; }
+        #services h2 { font-size: 32px; font-weight: bold; margin-bottom: 40px; }
+        #services p.sub-text { font-size: 18px; color: #666; margin-bottom: 60px; }
+        .services-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px; }
+        .service-card { background-color: #f7f9fb; padding: 40px; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.05); text-align: center; }
+        .service-card img { height: 60px; margin-bottom: 20px; }
+        .service-card h3 { font-size: 22px; font-weight: bold; margin-bottom: 15px; }
+        .service-card p { font-size: 16px; color: #666; margin-bottom: 30px; }
+
+        /* Why Choose Us Section */
+        #why-us { padding: 80px 0; display: flex; align-items: center; }
+        #why-us .content { flex: 1; margin-right: 40px; }
+        #why-us h2 { font-size: 32px; font-weight: bold; margin-bottom: 20px; }
+        #why-us p.sub-text { font-size: 18px; color: #666; margin-bottom: 30px; }
+        #why-us .features { list-style: none; padding: 0; margin-bottom: 40px; }
+        #why-us .features li { display: flex; align-items: center; margin-bottom: 15px; }
+        #why-us .features .tick { width: 20px; height: 20px; background-color: #f6c038; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-right: 15px; color: #333; }
+        #why-us .image { flex: 1; }
+        #why-us img { width: 100%; border-radius: 8px; }
+
+        /* Testimonials Section */
+        #testimonials { background-color: #2b5797; padding: 80px 0; color: #fff; text-align: center; }
+        #testimonials h2 { font-size: 32px; font-weight: bold; margin-bottom: 20px; }
+        #testimonials .rating { font-size: 24px; color: #f6c038; margin-bottom: 40px; }
+        .testimonials-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 30px; }
+        .testimonial-card { background-color: #fff; padding: 40px; border-radius: 8px; color: #333; position: relative; margin-top: 50px;}
+        #testimonial-testimonial-card img { width: 60px; height: 60px; object-fit: cover; border-radius: 50%; position: absolute; top: -30px; left: calc(50% - 30px); border: 4px solid #fff; z-index: 10;}
+        .testimonial-card p { font-size: 16px; color: #666; margin-bottom: 20px; }
+        .testimonial-card .quote-icon { position: absolute; bottom: 20px; right: 20px; font-size: 40px; color: rgba(43, 87, 151, 0.1); }
+        .pagination { margin-top: 40px; }
+        .pagination span { width: 10px; height: 10px; background-color: #ccc; border-radius: 50%; display: inline-block; margin: 0 5px; cursor: pointer; }
+        .pagination span.active { background-color: #f6c038; }
+
+        /* Get In Touch Section */
+        #get-in-touch { padding: 80px 0; display: flex; align-items: flex-start; }
+        #get-in-touch .content { flex: 1; margin-right: 40px; }
+        #get-in-touch h2 { font-size: 32px; font-weight: bold; margin-bottom: 40px; }
+        #get-in-touch form { display: grid; gap: 15px; }
+        #get-in-touch input, #get-in-touch textarea { padding: 15px; border: 1px solid #ccc; border-radius: 4px; }
+        #get-in-touch textarea { height: 150px; }
+        #get-in-touch .contact-details { flex: 1; background-color: #2b5797; color: #fff; padding: 40px; border-radius: 8px; }
+        #get-in-touch h3 { font-size: 22px; font-weight: bold; margin-bottom: 30px; }
+        #get-in-touch .contact-item { display: flex; align-items: center; margin-bottom: 20px; }
+        #get-in-touch .contact-item .icon { width: 30px; text-align: center; margin-right: 15px; }
+        #get-in-touch .social-icons { margin-top: 40px; }
+        #get-in-touch .social-icons a { color: #fff; text-decoration: none; margin-right: 15px; font-size: 18px; }
+        .choose-wrapper {
+    display: flex;
+    align-items: center; /* Centers items vertically */
+    gap: 50px;           /* Space between text and image */
+    padding: 60px 0;
+}
+
+.choose-text {
+    flex: 1;             /* Takes up 50% width */
+}
+
+.choose-image {
+    flex: 1;             /* Takes up 50% width */
+}
+
+.choose-image img {
+    width: 100%;
+    border-radius: 8px;  /* Matches your previous style */
+}
+
+/* Styling the list and checkmarks */
+.check-list {
+    list-style: none;
+    padding: 0;
+    margin: 20px 0;
+}
+
+.check-list li {
+    margin-bottom: 15px;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+}
+
+.check-list li span {
+    background: #f6c038; /* Your gold color */
+    color: white;
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    margin-right: 15px;
+    font-size: 14px;
+}
+    </style>
+</head>
+<body>
+
+ <header>
+    <div class="container">
+        <div class="logo">
+            <img src=" /home/lyn/Pictures/logo.jpeg " alt="SuccessHub Logo">
+            <span>SuccessHub</span>
+        </div>
+        <nav>
+            <ul> 
+                <li><a href="#hero">Home</a></li>
+                <li><a href="#hero">Home</a></li>
+                <li><a href="#about-us">About Us</a></li>
+                <li><a href="#services">Services</a></li>
+                <li><a href="#testimonials">Testimonials</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+        </nav>
+        <a href="#contact" class="btn-gold">Get Started</a>
+    </div>
+</header>
+
+<main>
+
+   <section id="hero">
+    <div class="container">
+        <div class="content">
+            <h1>Empowering Your Business Growth</h1>
+            <p>Expert Solutions for Lasting Success</p>
+            <div class="hero-btns">
+                <a href="#" class="btn btn-gold">Get a Free Consultation</a>
+                <a href="#" class="btn btn-blue">Our Services</a>
+            </div>
+        </div>
+    </div>
+</section>
+    <section id="services">
+        <div class="container">
+            <h2>Our Services</h2>
+            <p class="sub-text">How We Can Help Your Business</p>
+            <div class="services-grid">
+                <div class="service-card">
+                    <img src="Pictures/consultation.jpeg" alt="Business Consulting Icon">
+                    <h3>Business Consulting</h3>
+                    <p>Expert guidance to improve success and efficiency.</p>
+                    <a href="#" class="btn btn-blue">Learn More</a>
+                </div>
+                <div class="service-card">
+                    <img src="Pictures/marketing.jpeg" alt="Marketing Strategies Icon">
+                    <h3>Marketing Strategies</h3>
+                    <p>Innovative marketing campaigns to boost your reach</p>
+                    <a href="#" class="btn btn-blue">Learn More</a>
+                </div>
+                <div class="service-card">
+                    <img src="Pictures/tech.jpeg" alt="Technology Solutions Icon">
+                    <h3>Technology Solutions</h3>
+                    <p>Advanced IT solutions to streamline your operations.</p>
+                    <a href="#" class="btn btn-blue">Learn More</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="why-us">
+        <div class="container"> 
+            <div class="content">
+                <section id="why-choose-us">
+    <div class="container choose-wrapper">
+        <div class="choose-text">
+            <h2>Why Choose Us</h2>
+            <p>Your Trusted Partner for Business Success</p>
+            <ul class="check-list">
+                <li><span>✔</span> Results-Driven Approach</li>
+                <li><span>✔</span> Experienced Professionals</li>
+                <li><span>✔</span> Tailored Solutions for Your Needs</li>
+            </ul>
+            <a href="#" class="btn-gold">More About Us</a>
+        </div>
+
+        <div class="choose-image">
+            <img src="/home/lyn/Pictures/overview.jpeg" alt="Professional Man">
+        </div>
+    </div>
+</section>
+
+    <section id="testimonials">
+        <div class="container">
+            <h2>What Our Clients Say</h2>
+            <div class="rating">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+            <div class="testimonials-grid">
+                <div class="testimonial-card">
+                    <img src="Pictures/sarah.jpeg" alt="Sarah M. Avatar">
+                    <p>"Outstanding service and support! Our revenues have gronet digetfiranty since partnering with SuccessHub.</p>
+                    <p><strong>- Sarah M.</strong></p>
+                    <span class="quote-icon">&quot;</span>
+                </div>
+                <div class="testimonial-card">
+                    <img src="Pictures/james.jpeg" alt="James R. Avatar">
+                    <p>"Professional, reliable, and trully invested in our success. Highly recommend.</p>
+                    <p><strong>- James R.</strong></p>
+                    <span class="quote-icon">&quot;</span>
+                </div>
+            </div>
+            <div class="pagination">
+                <span class="active"></span>
+                <span></span>
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </section>
+
+    <section id="get-in-touch">
+        <div class="container">
+            <div class="content">
+                <h2>Get In Touch</h2>
+                <form>
+                    <input type="text" placeholder="Name">
+                    <input type="email" placeholder="Email">
+                    <input type="text" placeholder="Phone">
+                    <textarea placeholder="Message"></textarea>
+                    <button type="submit" class="btn btn-gold">Send Message</button>
+                </form>
+            </div>
+            <div class="contact-details">
+                <h3>Contact Us</h3>
+                <div class="contact-item">
+                    <span class="icon">&#9993;</span> info@successhub.com
+                </div>
+                <div class="contact-item">
+                    <span class="icon">&#9743;</span> (123) 456-7890
+                </div>
+                <div class="contact-item">
+                    <span class="icon">&#128205;</span> 123 Business Ave, Suite 100, City, State
+                </div>
+                <div class="social-icons">
+                    <a href="#">&fnof;</a>
+                    <a href="#">&#8734;</a>
+                    <a href="#">in</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+</body>
+</html>
