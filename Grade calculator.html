@@ -1,0 +1,803 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Student Grade Calculator &amp; FAQ</title>
+
+    <!-- jQuery (CDN) -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"
+    integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="
+    crossorigin="anonymous">
+</script>
+
+<style>
+    /* ---------- GLOBAL RESET / BASE ---------- */
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background: #f0f4f8;
+        color: #1e293b;
+        padding: 30px 20px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .app-wrapper {
+        max-width: 1100px;
+        width: 100%;
+    }
+
+    /* ---------- HEADING ---------- */
+    .main-heading {
+        text-align: center;
+        font-size: 2.2rem;
+        font-weight: 700;
+        color: #0f3b5e;
+        margin-bottom: 30px;
+        letter-spacing: 1px;
+        border-bottom: 4px solid #2d7fc1;
+        padding-bottom: 12px;
+        display: inline-block;
+    }
+
+    /* ---------- SECTION CARDS ---------- */
+    .section-card {
+        background: #ffffff;
+        border-radius: 18px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+        padding: 28px 32px;
+        margin-bottom: 40px;
+        border: 1px solid #e2e8f0;
+        transition: box-shadow 0.2s;
+    }
+
+    .section-card:hover {
+        box-shadow: 0 16px 40px rgba(0, 0, 0, 0.12);
+    }
+
+    .section-title {
+        font-size: 1.6rem;
+        font-weight: 600;
+        color: #0f3b5e;
+        margin-bottom: 20px;
+        border-left: 6px solid #2d7fc1;
+        padding-left: 16px;
+    }
+
+    /* ---------- FORM STYLES ---------- */
+    .form-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 18px 30px;
+    }
+
+    .form-group {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .form-group label {
+        font-weight: 600;
+        font-size: 0.95rem;
+        margin-bottom: 5px;
+        color: #1e3a5f;
+    }
+
+    .form-group input {
+        padding: 10px 14px;
+        border: 2px solid #dce3ec;
+        border-radius: 10px;
+        font-size: 1rem;
+        transition: border-color 0.2s, box-shadow 0.2s;
+        background: #fafcff;
+        outline: none;
+    }
+
+    .form-group input:focus {
+        border-color: #2d7fc1;
+        box-shadow: 0 0 0 4px rgba(45, 127, 193, 0.15);
+    }
+
+    .form-group input.error {
+        border-color: #dc2626;
+        background: #fef2f2;
+    }
+
+    .form-actions {
+        grid-column: 1 / -1;
+        display: flex;
+        gap: 16px;
+        margin-top: 8px;
+        flex-wrap: wrap;
+    }
+
+    .btn {
+        padding: 12px 34px;
+        border: none;
+        border-radius: 30px;
+        font-size: 1rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: background 0.2s, transform 0.1s;
+        letter-spacing: 0.5px;
+    }
+
+    .btn:active {
+        transform: scale(0.96);
+    }
+
+    .btn-primary {
+        background: #1a6b3c;
+        color: #fff;
+    }
+
+    .btn-primary:hover {
+        background: #13522e;
+    }
+
+    .btn-danger {
+        background: #b91c1c;
+        color: #fff;
+    }
+
+    .btn-danger:hover {
+        background: #991515;
+    }
+
+    /* ---------- REPORT SECTION ---------- */
+    .report-container {
+        margin-top: 20px;
+        border-top: 2px dashed #cbd5e1;
+        padding-top: 24px;
+    }
+
+    .report-card {
+        background: #f8fafc;
+        border-radius: 14px;
+        padding: 24px 28px;
+        border: 1px solid #dce3ec;
+        display: none;
+        /* hidden by default */;
+    }
+
+    .report-card.visible {
+        display: block;
+        animation: fadeSlide 0.35s ease;
+    }
+
+    @keyframes fadeSlide {
+        0% { opacity: 0; transform: translateY(12px); }
+        100% { opacity: 1; transform: translateY(0); }
+    }
+
+    .report-row {
+        display: flex;
+        justify-content: space-between;
+        padding: 8px 0;
+        border-bottom: 1px solid #e9edf2;
+        font-size: 1.05rem;
+    }
+
+    .report-row:last-child {
+        border-bottom: none;
+    }
+
+    .report-row .label {
+        font-weight: 600;
+        color: #1e3a5f;
+    }
+
+    .report-row .value {
+        font-weight: 500;
+        color: #0b2b44;
+    }
+
+    .report-row .value.highlight {
+        color: #1a6b3c;
+        font-weight: 700;
+        font-size: 1.2rem;
+    }
+
+    /* ---------- FAQ SECTION ---------- */
+    .faq-search-wrap {
+        margin-bottom: 24px;
+    }
+
+    .faq-search-wrap input {
+        width: 100%;
+        padding: 14px 20px;
+        border: 2px solid #dce3ec;
+        border-radius: 40px;
+        font-size: 1rem;
+        background: #fafcff;
+        transition: border-color 0.2s, box-shadow 0.2s;
+        outline: none;
+    }
+
+    .faq-search-wrap input:focus {
+        border-color: #2d7fc1;
+        box-shadow: 0 0 0 4px rgba(45, 127, 193, 0.12);
+    }
+
+    .faq-list {
+        display: flex;
+        flex-direction: column;
+        gap: 14px;
+    }
+
+    .faq-item {
+        background: #f8fafc;
+        border-radius: 14px;
+        border: 1px solid #e2e8f0;
+        overflow: hidden;
+        transition: border-color 0.2s, box-shadow 0.2s;
+        cursor: pointer;
+    }
+
+    .faq-item:hover {
+        border-color: #b3c9e0;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+    }
+
+    .faq-item.hidden-faq {
+        display: none;
+    }
+
+    .faq-question {
+        padding: 18px 24px;
+        font-weight: 600;
+        font-size: 1.08rem;
+        color: #0f3b5e;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        user-select: none;
+        background: #ffffff;
+        transition: background 0.15s;
+    }
+
+    .faq-question:hover {
+        background: #f1f6fc;
+    }
+
+    .faq-question .icon {
+        font-size: 1.4rem;
+        font-weight: 300;
+        color: #2d7fc1;
+        transition: transform 0.25s;
+    }
+
+    .faq-item.open .faq-question .icon {
+        transform: rotate(180deg);
+    }
+
+    .faq-answer {
+        padding: 0 24px 20px 24px;
+        color: #334155;
+        line-height: 1.6;
+        display: none;
+        /* hidden by default */;
+        font-size: 1rem;
+    }
+
+    .faq-item.open .faq-answer {
+        display: block;
+        animation: fadeSlide 0.3s ease;
+    }
+
+    .no-faq-msg {
+        text-align: center;
+        padding: 30px 0;
+        color: #64748b;
+        font-size: 1.1rem;
+        display: none;
+    }
+
+    .no-faq-msg.show {
+        display: block;
+    }
+
+    /* ---------- RESPONSIVE ---------- */
+    @media (max-width: 700px) {
+        .form-grid {
+            grid-template-columns: 1fr;
+            gap: 14px;
+        }
+
+        .form-actions {
+            flex-direction: column;
+        }
+
+        .btn {
+            width: 100%;
+            text-align: center;
+            justify-content: center;
+        }
+
+        .section-card {
+            padding: 20px 16px;
+        }
+
+        .main-heading {
+            font-size: 1.7rem;
+        }
+
+        .report-row {
+            flex-direction: column;
+            gap: 2px;
+            padding: 10px 0;
+        }
+    }
+
+    @media (max-width: 480px) {
+        body {
+            padding: 16px 12px;
+        }
+
+        .faq-question {
+            font-size: 0.98rem;
+            padding: 14px 16px;
+        }
+
+        .faq-answer {
+            padding: 0 16px 16px 16px;
+            font-size: 0.95rem;
+        }
+    }
+
+    /* ---------- ERROR MESSAGE (jQuery) ---------- */
+    .error-toast {
+        background: #dc2626;
+        color: #fff;
+        padding: 12px 22px;
+        border-radius: 40px;
+        font-weight: 500;
+        margin-bottom: 16px;
+        display: inline-block;
+        box-shadow: 0 6px 20px rgba(220, 38, 38, 0.25);
+    }
+</style>
+</head>
+<body>
+
+    <div class="app-wrapper">
+
+        <!-- ========================================= -->
+        <!-- TASK 1 – STUDENT MEAN GRADE CALCULATOR     -->
+        <!-- ========================================= -->
+        <h1 class="main-heading">📊 Student Grade Calculator</h1>
+
+        <div class="section-card" id="gradeCalcSection">
+            <h2 class="section-title">📝 Enter Student Marks</h2>
+
+            <form id="studentForm" novalidate>
+                <div class="form-grid">
+
+                    <!-- Admission Number -->
+                    <div class="form-group">
+                        <label for="admission">Admission Number *</label>
+                        <input type="text" id="admission" placeholder="e.g. 2024001" />
+                    </div>
+
+                    <!-- Name -->
+                    <div class="form-group">
+                        <label for="studentName">Student Name *</label>
+                        <input type="text" id="studentName" placeholder="Full name" />
+                    </div>
+
+                    <!-- Biology -->
+                    <div class="form-group">
+                        <label for="biology">Biology (0–100) *</label>
+                        <input type="text" id="biology" placeholder="e.g. 85" />
+                    </div>
+
+                    <!-- Chemistry -->
+                    <div class="form-group">
+                        <label for="chemistry">Chemistry (0–100) *</label>
+                        <input type="text" id="chemistry" placeholder="e.g. 72" />
+                    </div>
+
+                    <!-- Physics -->
+                    <div class="form-group">
+                        <label for="physics">Physics (0–100) *</label>
+                        <input type="text" id="physics" placeholder="e.g. 68" />
+                    </div>
+
+                    <!-- Buttons -->
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-primary" id="computeBtn">📈 Compute Results</button>
+                        <button type="reset" class="btn btn-danger" id="clearBtn">🧹 Clear Form</button>
+                    </div>
+
+                </div>
+            </form>
+
+            <!-- Report Section -->
+            <div class="report-container">
+                <h3 style="font-size:1.2rem; color:#0f3b5e; margin-bottom:12px;">📄 Student Report</h3>
+                <div class="report-card" id="reportCard">
+                    <div class="report-row">
+                        <span class="label">Admission</span>
+                        <span class="value" id="rAdmission">—</span>
+                    </div>
+                    <div class="report-row">
+                        <span class="label">Name</span>
+                        <span class="value" id="rName">—</span>
+                    </div>
+                    <div class="report-row">
+                        <span class="label">Biology</span>
+                        <span class="value" id="rBio">—</span>
+                    </div>
+                    <div class="report-row">
+                        <span class="label">Chemistry</span>
+                        <span class="value" id="rChem">—</span>
+                    </div>
+                    <div class="report-row">
+                        <span class="label">Physics</span>
+                        <span class="value" id="rPhys">—</span>
+                    </div>
+                    <div class="report-row">
+                        <span class="label">Total Marks</span>
+                        <span class="value" id="rTotal">—</span>
+                    </div>
+                    <div class="report-row">
+                        <span class="label">Average</span>
+                        <span class="value" id="rAvg">—</span>
+                    </div>
+                    <div class="report-row">
+                        <span class="label">Mean Grade</span>
+                        <span class="value highlight" id="rGrade">—</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ========================================= -->
+        <!-- TASK 2 – INTERACTIVE FAQ & HELP CENTER     -->
+        <!-- ========================================= -->
+        <h1 class="main-heading" style="margin-top:20px;">❓ FAQ &amp; Help Center</h1>
+
+        <div class="section-card" id="faqSection">
+            <h2 class="section-title">📖 Frequently Asked Questions</h2>
+
+            <!-- Search Input -->
+            <div class="faq-search-wrap">
+                <input type="text" id="faqSearch" placeholder="🔍 Search questions…" />
+            </div>
+
+            <!-- FAQ List -->
+            <div class="faq-list" id="faqList">
+
+                <!-- FAQ 1 -->
+                <div class="faq-item" data-keywords="admission number registration">
+                    <div class="faq-question">
+                        <span>How do I get my admission number?</span>
+                        <span class="icon">▼</span>
+                    </div>
+                    <div class="faq-answer">
+                        Your admission number is printed on your student ID card and on all official school correspondence. If you've lost it, please contact the registrar's office.
+                    </div>
+                </div>
+
+                <!-- FAQ 2 -->
+                <div class="faq-item" data-keywords="grades grading mean average">
+                    <div class="faq-question">
+                        <span>How is the mean grade calculated?</span>
+                        <span class="icon">▼</span>
+                    </div>
+                    <div class="faq-answer">
+                        The mean grade is calculated by averaging your scores in Biology, Chemistry, and Physics. The average is then mapped to a grade: 80–100 → 90, 70–79 → 80, 60–69 → 70, 40–59 → 60, and 0–39 → 50.
+                    </div>
+                </div>
+
+                <!-- FAQ 3 -->
+                <div class="faq-item" data-keywords="password reset account login">
+                    <div class="faq-question">
+                        <span>I forgot my portal password. What should I do?</span>
+                        <span class="icon">▼</span>
+                    </div>
+                    <div class="faq-answer">
+                        Click the "Forgot Password" link on the login page. You'll receive a reset link via your registered email. If you still have issues, visit the IT help desk.
+                    </div>
+                </div>
+
+                <!-- FAQ 4 -->
+                <div class="faq-item" data-keywords="timetable schedule classes">
+                    <div class="faq-question">
+                        <span>Where can I find the class timetable?</span>
+                        <span class="icon">▼</span>
+                    </div>
+                    <div class="faq-answer">
+                        The up-to-date timetable is available on the student portal under "My Schedule". You can also check the notice board outside the administration block.
+                    </div>
+                </div>
+
+                <!-- FAQ 5 -->
+                <div class="faq-item" data-keywords="fee payment tuition finance">
+                    <div class="faq-question">
+                        <span>How do I pay my school fees?</span>
+                        <span class="icon">▼</span>
+                    </div>
+                    <div class="faq-answer">
+                        Fees can be paid via bank transfer, mobile money, or directly at the school's finance office. Please use your admission number as the reference for all payments.
+                    </div>
+                </div>
+
+                <!-- FAQ 6 -->
+                <div class="faq-item" data-keywords="library books borrow resources">
+                    <div class="faq-question">
+                        <span>What are the library borrowing rules?</span>
+                        <span class="icon">▼</span>
+                    </div>
+                    <div class="faq-answer">
+                        Students may borrow up to 3 books at a time for a period of 14 days. Renewals are allowed once if the book is not reserved. Late returns incur a fine of 50 KES per day.
+                    </div>
+                </div>
+
+            </div><!-- /faq-list -->
+
+            <!-- No match message -->
+            <div class="no-faq-msg" id="noFaqMsg">😕 No FAQs found matching your search.</div>
+
+        </div><!-- /faqSection -->
+
+        <!-- Footer -->
+        <div style="text-align:center; margin-top:20px; color:#64748b; font-size:0.9rem; border-top:1px solid #e2e8f0; padding-top:20px;">
+            &copy; Site by Pauline. All rights reserved
+        </div>
+
+    </div><!-- /app-wrapper -->
+
+
+    <!-- ============================================= -->
+    <!-- JAVASCRIPT (jQuery + vanilla where needed)    -->
+    <!-- ============================================= -->
+    <script>
+        $(document).ready(function() {
+
+            // --------------------------------------------------------------
+            // TASK 1 – STUDENT GRADE CALCULATOR
+            // --------------------------------------------------------------
+
+            // --- Helper: show error toast ---
+            function showError(msg) {
+                // Remove any existing toast
+                $('.error-toast').remove();
+                const $toast = $('<div class="error-toast">⚠️ ' + msg + '</div>');
+                $('#studentForm').prepend($toast);
+                // Auto-dismiss after 5s
+                setTimeout(function() {
+                    $toast.fadeOut(400, function() { $(this).remove(); });
+                }, 5000);
+            }
+
+            // --- ValidateInput() using jQuery .val() ---
+            function ValidateInput() {
+                // Read values with .val()
+                const admission = $('#admission').val().trim();
+                const name = $('#studentName').val().trim();
+                const bio = $('#biology').val().trim();
+                const chem = $('#chemistry').val().trim();
+                const phys = $('#physics').val().trim();
+
+                // Reset error styling
+                $('.form-group input').removeClass('error');
+
+                // 1. Admission: numeric & not null
+                if (admission === '') {
+                    showError('Admission number is required.');
+                    $('#admission').addClass('error');
+                    return false;
+                }
+                if (!/^\d+$/.test(admission)) {
+                    showError('Admission number must be numeric.');
+                    $('#admission').addClass('error');
+                    return false;
+                }
+
+                // 2. Name: not null
+                if (name === '') {
+                    showError('Student name is required.');
+                    $('#studentName').addClass('error');
+                    return false;
+                }
+
+                // 3. Marks: numeric, not null, between 0 and 100
+                const marks = [
+                    { id: '#biology', label: 'Biology', val: bio },
+                    { id: '#chemistry', label: 'Chemistry', val: chem },
+                    { id: '#physics', label: 'Physics', val: phys }
+                ];
+
+                for (let m of marks) {
+                    if (m.val === '') {
+                        showError(m.label + ' mark is required.');
+                        $(m.id).addClass('error');
+                        return false;
+                    }
+                    if (!/^\d+(\.\d+)?$/.test(m.val)) {
+                        showError(m.label + ' must be a valid number.');
+                        $(m.id).addClass('error');
+                        return false;
+                    }
+                    const num = parseFloat(m.val);
+                    if (num < 0 || num > 100) {
+                        showError(m.label + ' must be between 0 and 100.');
+                        $(m.id).addClass('error');
+                        return false;
+                    }
+                }
+
+                return true; // all valid
+            }
+
+            // --- Calculate sum & average ---
+            function calcSumAndAverage(bio, chem, phys) {
+                const sum = bio + chem + phys;
+                const avg = sum / 3;
+                return { sum, avg };
+            }
+
+            // --- Determine mean grade using the grading system ---
+            function determineGrade(avg) {
+                if (avg >= 80 && avg <= 100) return 90;
+                if (avg >= 70 && avg <= 79) return 80;
+                if (avg >= 60 && avg <= 69) return 70;
+                if (avg >= 40 && avg <= 59) return 60;
+                if (avg >= 0 && avg <= 39) return 50;
+                return '—'; // fallback (should not happen)
+            }
+
+            // --- Display student details in report section ---
+            function displayReport(admission, name, bio, chem, phys, total, avg, grade) {
+                $('#rAdmission').text(admission);
+                $('#rName').text(name);
+                $('#rBio').text(bio);
+                $('#rChem').text(chem);
+                $('#rPhys').text(phys);
+                $('#rTotal').text(total);
+                $('#rAvg').text(avg.toFixed(1));
+                $('#rGrade').text(grade);
+
+                // Show the report card with animation
+                const $card = $('#reportCard');
+                $card.addClass('visible');
+            }
+
+            // --- Main compute handler ---
+            $('#computeBtn').on('click', function() {
+                // 1. Validate
+                if (!ValidateInput()) {
+                    // Hide report if validation fails (optional)
+                    $('#reportCard').removeClass('visible');
+                    return;
+                }
+
+                // 2. Read values (already validated)
+                const admission = $('#admission').val().trim();
+                const name = $('#studentName').val().trim();
+                const bio = parseFloat($('#biology').val().trim());
+                const chem = parseFloat($('#chemistry').val().trim());
+                const phys = parseFloat($('#physics').val().trim());
+
+                // 3. Calculate sum & average
+                const { sum, avg } = calcSumAndAverage(bio, chem, phys);
+
+                // 4. Determine grade
+                const grade = determineGrade(avg);
+
+                // 5. Display report
+                displayReport(admission, name, bio, chem, phys, sum, avg, grade);
+
+                // Remove any old error toast
+                $('.error-toast').remove();
+            });
+
+            // --- Clear form handler ---
+            $('#clearBtn').on('click', function() {
+                // Reset all form fields
+                $('#studentForm')[0].reset();
+                // Remove error styling
+                $('.form-group input').removeClass('error');
+                // Hide report
+                $('#reportCard').removeClass('visible');
+                // Remove any error toast
+                $('.error-toast').remove();
+            });
+
+            // Also clear errors on input focus
+            $('.form-group input').on('focus', function() {
+                $(this).removeClass('error');
+                $('.error-toast').remove();
+            });
+
+
+            // --------------------------------------------------------------
+            // TASK 2 – INTERACTIVE FAQ
+            // --------------------------------------------------------------
+
+            // --- Toggle FAQ answer (vanilla JS function as requested) ---
+            // This function receives the clicked FAQ question element.
+            function toggleFaqAnswer(questionEl) {
+                const $item = $(questionEl).closest('.faq-item');
+                // Toggle 'open' class on the item
+                $item.toggleClass('open');
+            }
+
+            // Attach click event to each FAQ question
+            $('.faq-question').on('click', function(e) {
+                // Call the toggle function with the native element
+                toggleFaqAnswer(this);
+            });
+
+            // --- Search FAQ (vanilla JS function) ---
+            // Receives a question from input text and search keyword.
+            function searchFaqQuestions(inputText, keyword) {
+                // This is a helper; we'll use it inside the jQuery filter below.
+                // But we also expose it as a standalone function per spec.
+                const $items = $('.faq-item');
+                let matchCount = 0;
+
+                $items.each(function() {
+                    const $item = $(this);
+                    const question = $item.find('.faq-question').text().toLowerCase();
+                    const keywords = ($item.data('keywords') || '').toLowerCase();
+                    const search = keyword.toLowerCase().trim();
+
+                    if (search === '') {
+                        $item.removeClass('hidden-faq');
+                        matchCount++;
+                    } else if (question.includes(search) || keywords.includes(search)) {
+                        $item.removeClass('hidden-faq');
+                        matchCount++;
+                    } else {
+                        $item.addClass('hidden-faq');
+                    }
+                });
+
+                return matchCount;
+            }
+
+            // --- jQuery function for search box filtering ---
+            $('#faqSearch').on('input', function() {
+                const keyword = $(this).val();
+
+                // Use the search function (vanilla) but call it from jQuery context
+                const matchCount = searchFaqQuestions(null, keyword);
+
+                // Show/hide "no FAQs found" message
+                if (matchCount === 0 && keyword.trim() !== '') {
+                    $('#noFaqMsg').addClass('show');
+                } else {
+                    $('#noFaqMsg').removeClass('show');
+                }
+
+                // If search is empty, ensure all items are visible and close any open ones?
+                // We'll keep the open state as-is, but we hide non-matching.
+                // Also, if search becomes empty, show all.
+                if (keyword.trim() === '') {
+                    $('.faq-item').removeClass('hidden-faq');
+                    $('#noFaqMsg').removeClass('show');
+                }
+            });
+
+            // --- (Optional) Close other FAQs when one opens ---
+            // Not required but improves UX. We'll skip to keep it simple.
+
+            // --- Ensure all answers are hidden by default ---
+            // (already hidden via CSS .faq-answer { display: none; })
+            // But we also want to ensure no 'open' class on load.
+            $('.faq-item').removeClass('open');
+
+        }); // end document.ready
+    </script>
+
+</body>
+</html>
